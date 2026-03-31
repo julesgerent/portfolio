@@ -1,52 +1,961 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jules Gerent - Portfolio</title>
-    <style>
-        body {
-            background-color: #f8f9fa; 
-            color: #333; 
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jules' Portfolio</title>
 
-        .container {
-            border: 1px solid #ddd;
-            padding: 40px;
-            background-color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
+  <style>
+    @font-face {
+    font-family: 'MADE Outer Sans';
+    src: url('assets/fonts/MADEOuterSans.woff2D:/Documents/Site WEB/V2/main.html') format('woff2');
+    font-weight: 400;
+}
 
-        p {
-            font-size: 1rem;
-            color: #666;
-        }
+    :root {
+      --font: 'MADE Outer Sans', sans-serif;
+      --expo:    cubic-bezier(0.16, 1, 0.3, 1);
+      --cream:   #EDE8DF;
+      --dim:     rgba(237, 232, 223, 0.45);
+      --divider: rgba(237, 232, 223, 0.08);
+      --glass-bg:     rgba(255, 255, 255, 0.07);
+      --glass-border: rgba(255, 255, 255, 0.18);
+      --glass-shadow: rgba(0, 0, 30, 0.45);
+    }
 
-        .loader {
-            margin-top: 20px;
-            font-weight: bold;
-        }
-    </style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scrollbar-width: none; }
+    html::-webkit-scrollbar { display: none; }
+
+    body {
+      font-family: var(--font);
+      color: var(--cream);
+      overflow-x: hidden;
+      background: linear-gradient(to bottom, #000000 0%, #00000d 30%, #000012 60%, #00001a 100%);
+      background-attachment: fixed;
+    }
+
+    #liquid-scrollbar {
+      position: fixed;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 9999;
+      width: 14px;
+      height: 60vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: all;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.4s ease, width 0.2s ease;
+    }
+
+    #liquid-scrollbar.visible { opacity: 1; }
+
+    #liquid-scrollbar:hover {
+      width: 16px;
+    }
+
+    #scrollbar-track {
+      width: 100%;
+      height: 100%;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      backdrop-filter: blur(12px) saturate(140%);
+      -webkit-backdrop-filter: blur(12px) saturate(140%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 2px 12px rgba(0,0,30,0.35);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    #scrollbar-track::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 2px;
+      width: 3px;
+      height: 30%;
+      border-radius: 999px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.18), transparent);
+      pointer-events: none;
+    }
+
+    #scrollbar-thumb {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      min-height: 36px;
+      border-radius: 999px;
+      background: linear-gradient(
+        160deg,
+        rgba(255,255,255,0.42) 0%,
+        rgba(255,255,255,0.16) 40%,
+        rgba(180,200,255,0.22) 100%
+      );
+      border: 1px solid rgba(255,255,255,0.32);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.50),
+        inset 0 -1px 0 rgba(255,255,255,0.08),
+        0 2px 10px rgba(0,0,40,0.4),
+        0 0 20px rgba(180,200,255,0.14);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: top 0.08s linear, background 0.15s ease, box-shadow 0.15s ease;
+      cursor: grab;
+    }
+
+    #scrollbar-thumb:active { cursor: grabbing; }
+
+    #scrollbar-thumb:hover,
+    #scrollbar-thumb.dragging {
+      background: linear-gradient(
+        160deg,
+        rgba(255,255,255,0.55) 0%,
+        rgba(255,255,255,0.22) 40%,
+        rgba(200,220,255,0.30) 100%
+      );
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.65),
+        inset 0 -1px 0 rgba(255,255,255,0.10),
+        0 2px 14px rgba(0,0,40,0.5),
+        0 0 28px rgba(180,200,255,0.25);
+    }
+
+    #scrollbar-thumb::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 2px;
+      width: 3px;
+      height: 40%;
+      border-radius: 999px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.75), transparent);
+      pointer-events: none;
+    }
+    
+    .footer-bottom a {
+        font-family: var(--font);
+        color: rgba(237,232,223,0.18); 
+        text-decoration: underline; 
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+    }
+
+.footer-bottom a:hover {
+  color: rgba(237,232,223,0.35); 
+}
+
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      overflow: hidden;
+    }
+
+    #splash-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('assets/cover-photo.png');
+      background-size: cover;
+      background-position: center;
+      background-color: #0a0a14;
+      transition: transform 1.2s var(--expo), filter 1.2s var(--expo);
+    }
+
+    #splash-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 10, 0.35);
+    }
+
+    #paper-wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: clamp(180px, 30vw, 360px);
+      aspect-ratio: 4 / 3;
+      cursor: pointer;
+      transition: opacity 0.5s ease, transform 0.5s var(--expo);
+    }
+
+    #paper-wrap::after {
+      content: 'CLIQUER';
+      position: absolute;
+      bottom: -38px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font);
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      color: rgba(255, 255, 255, 0.5);
+      animation: blink 2.2s ease-in-out infinite;
+      white-space: nowrap;
+      transition: content 0s;
+    }
+
+    #paper-wrap:hover::after {
+      content: 'ENTRER';
+      animation: none;
+      opacity: 0.9;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.5; }
+      50%       { opacity: 0.1; }
+    }
+
+    #paper-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 3px;
+      transform: rotate(-3deg);
+      transition: transform 0.45s ease;
+    }
+
+    #paper-wrap:hover img {
+      transform: rotate(-1deg) scale(1.025);
+    }
+
+    #splash.leaving #splash-bg {
+      transform: scale(1.07);
+      filter: blur(14px) brightness(0.5);
+    }
+
+    #splash.leaving #paper-wrap {
+      opacity: 0;
+      transform: translate(-50%, -56%) scale(0.9);
+    }
+
+    #splash.gone { display: none; }
+
+
+    #nav-glass {
+      position: fixed;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 8px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 999px;
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      box-shadow:
+        0 2px 24px var(--glass-shadow),
+        inset 0 1px 0 rgba(255,255,255,0.12),
+        inset 0 -1px 0 rgba(255,255,255,0.04);
+      opacity: 0;
+      transform: translateX(-50%) translateY(-8px);
+      transition: opacity 0.7s ease 0.6s, transform 0.7s var(--expo) 0.6s;
+    }
+
+    #nav-glass.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .nav-btn {
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cream);
+      text-decoration: none;
+      padding: 8px 20px;
+      border-radius: 999px;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-btn.active {
+      background: rgba(255, 255, 255, 0.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+
+    .nav-sep {
+      width: 1px;
+      height: 14px;
+      background: rgba(255,255,255,0.12);
+      flex-shrink: 0;
+    }
+
+
+
+    #portfolio {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.9s ease 0.2s, transform 0.9s var(--expo) 0.2s;
+    }
+
+    #portfolio.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    #accueil {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: clamp(80px, 12vw, 140px) clamp(28px, 6vw, 88px) clamp(60px, 8vw, 100px);
+    }
+
+    #hero-asset-zone {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(100px, 14vh, 160px) 0 clamp(32px, 5vh, 64px);
+    }
+
+    #hero-asset-zone img {
+      width: clamp(300px, 65vw, 1000px);
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 16px 48px rgba(0,0,20,0.7));
+    }
+
+    #accueil .hero-name {
+      margin-top: auto;
+    }
+
+    .eyebrow {
+      font-size: clamp(11px, 1.2vw, 13px);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 16px;
+    }
+
+    #accueil h1 {
+      font-size: clamp(52px, 10vw, 140px);
+      font-weight: 700;
+      line-height: 0.93;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--cream);
+    }
+
+    #accueil h1 em {
+      font-style: normal;
+      color: rgba(237, 232, 223, 0.15);
+    }
+
+    .glow-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(237,232,223,0.15) 20%, rgba(237,232,223,0.15) 80%, transparent);
+    }
+
+    #projets {
+      padding: clamp(80px, 10vw, 130px) clamp(28px, 6vw, 88px);
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: clamp(48px, 7vw, 96px);
+    }
+
+    .entry {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: clamp(40px, 7vw, 110px);
+      padding: clamp(56px, 8vw, 110px) 0;
+    }
+
+    .entry + .entry { border-top: 1px solid var(--divider); }
+
+    .entry.flip .asset-wrap { order: 2; }
+    .entry.flip .text-wrap  { order: 1; }
+
+    .asset-wrap { position: relative; }
+
+    .asset-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.55s var(--expo);
+      filter: drop-shadow(0 8px 32px rgba(0,0,40,0.6));
+    }
+
+    .asset-wrap:hover img {
+      transform: scale(1.025) rotate(0deg) !important;
+    }
+
+    .asset-wrap .project-num {
+      position: absolute;
+      bottom: -20px;
+      right: -10px;
+      font-size: clamp(80px, 12vw, 150px);
+      font-weight: 700;
+      color: rgba(237,232,223,0.07);
+      line-height: 1;
+      z-index: 2;
+      letter-spacing: -0.05em;
+      user-select: none;
+      pointer-events: none;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.12);
+      text-shadow:
+        0 2px 20px rgba(180,200,255,0.10),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+      mix-blend-mode: screen;
+    }
+
+    .text-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .text-wrap .tag {
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .text-wrap h2 {
+      font-size: clamp(26px, 4vw, 50px);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 1.05;
+      color: var(--cream);
+    }
+
+    .text-wrap p {
+      font-size: clamp(15px, 1.5vw, 17px);
+      line-height: 1.75;
+      color: var(--dim);
+      max-width: 40ch;
+    }
+
+    .btn-projet {
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cream);
+      background: none;
+      border: none;
+      border-bottom: 1px solid rgba(237,232,223,0.3);
+      padding-bottom: 3px;
+      width: fit-content;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-projet::after { content: ' →'; }
+
+    .btn-projet:hover {
+      color: rgba(237,232,223,0.5);
+      border-color: rgba(237,232,223,0.1);
+    }
+
+    #contact {
+      padding: clamp(80px, 10vw, 130px) clamp(28px, 6vw, 88px);
+      border-top: 1px solid var(--divider);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    #contact .big {
+      font-size: clamp(32px, 6vw, 82px);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--cream);
+    }
+
+    #contact .links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    #contact .links a {
+      font-size: 13px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    #contact .links a:hover { color: var(--cream); }
+
+    .footer-bottom {
+      padding: 28px clamp(28px, 6vw, 88px);
+      border-top: 1px solid var(--divider);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(237,232,223,0.18);
+    }
+
+
+    #projet-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: linear-gradient(to bottom, #000000 0%, #00001a 100%);
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.55s var(--expo);
+    }
+
+    #projet-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .projet-inner {
+      min-height: 100vh;
+      padding: clamp(100px, 12vh, 140px) clamp(28px, 6vw, 88px) clamp(60px, 8vh, 100px);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(40px, 6vw, 72px);
+    }
+
+    #btn-retour {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cream);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 999px;
+      padding: 10px 22px;
+      cursor: pointer;
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      box-shadow: 0 2px 18px var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,0.1);
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    #btn-retour::before { content: '←'; }
+
+    #btn-retour:hover {
+      background: rgba(255,255,255,0.12);
+      transform: scale(1.03);
+    }
+
+    .projet-content {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: clamp(32px, 5vw, 72px);
+      align-items: start;
+    }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #0a0a14;
+      box-shadow: 0 12px 48px rgba(0,0,30,0.7);
+    }
+
+    .video-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .projet-info {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-top: 8px;
+    }
+
+    .projet-info .p-tag {
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .projet-info h2 {
+      font-size: clamp(28px, 4vw, 54px);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 1.05;
+      color: var(--cream);
+    }
+
+    .projet-info .p-desc {
+      font-size: clamp(15px, 1.5vw, 17px);
+      line-height: 1.8;
+      color: var(--dim);
+    }
+
+    @media (max-width: 768px) {
+      .projet-content {
+        grid-template-columns: 1fr;
+      }
+
+      .entry, .entry.flip {
+        grid-template-columns: 1fr;
+      }
+
+      .entry.flip .asset-wrap { order: 1; }
+      .entry.flip .text-wrap  { order: 2; }
+
+      #contact {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      #contact .links { align-items: flex-start; }
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Jules Gerent</h1>
-        <p>Site en cours de maintenance</p>
-        <div class="loader">_</div>
-    </div>
+  <div id="splash">
+    <div id="splash-bg"></div>
 
+    <div id="paper-wrap" role="button" aria-label="Entrer dans le portfolio">
+      <img src="assets/entrer.png" alt="Portfolio" />
+    </div>
+  </div>
+
+  <nav id="nav-glass" aria-label="Navigation">
+    <a href="#accueil" class="nav-btn">Accueil</a>
+    <div class="nav-sep"></div>
+    <a href="#projets" class="nav-btn">Projets</a>
+    <div class="nav-sep"></div>
+    <a href="#contact" class="nav-btn">Contact</a>
+  </nav>
+
+
+  <div id="portfolio">
+
+    <section id="accueil">
+      <div id="hero-asset-zone">
+        <img src="assets/main.png" alt="portfolio" />
+      </div>
+
+      <div class="hero-name">
+        <p class="eyebrow">Portfolio — 2026</p>
+        <h1>Jules<br><em>Gerent</em></h1>
+      </div>
+
+    </section>
+
+    <div class="glow-divider"></div>
+
+    <section id="projets">
+      <p class="section-label">Projets sélectionnés</p>
+
+      <article class="entry" data-youtube="lSTJbk_yywo" data-titre="présentation" data-tag="vidéo" data-desc="Dans cette vidéo j'essaie de te montrer mon parcours jusqu'à aujourd'hui dans le montage. J'ai utilisé After Effects 2020 & 2025 pour la vidéo, Premiere Pro 2026 & FL Studio pour le sound design. Réalisé le : 17/03/2026">
+        <div class="asset-wrap" data-num="01">
+          <img src="assets/illustration-01.png" alt="présentation" style="rotate: -2deg;" />
+          <span class="project-num">01</span>
+        </div>
+        <div class="text-wrap">
+          <span class="tag">projet 01 · vidéo</span>
+          <h2>vidéo de<br>présentation</h2>
+          <p>Vidéo ayant pour but de montrer brièvement mes compétences.</p>
+          <button class="btn-projet">Voir le projet</button>
+        </div>
+      </article>
+
+      <article class="entry flip" data-youtube="qe65Ir58W-I" data-titre="jingle pour la poste" data-tag="vidéo" data-desc="Vidéo ayant pour but de promouvoir le passage de la flamme Olymique dans la ville de Sorgues  (84700). J'ai utilisé After Effects 2020 pour la vidéo et Premiere Pro 2020 pour le sound design. Réalisé le : 19/06/2024">
+        <div class="asset-wrap" data-num="02">
+          <img src="assets/illustration-02.png" alt="jingle pour la poste" style="rotate: 3deg;" />
+          <span class="project-num">02</span>
+        </div>
+        <div class="text-wrap">
+          <span class="tag">projet 02 · vidéo</span>
+          <h2>jingle vidéo pour<br>la poste</h2>
+          <p>Vidéo ayant pour but de promouvoir le passage de la flamme Olymique dans la ville de Sorgues  (84700)</p>
+          <button class="btn-projet">Voir le projet</button>
+        </div>
+      </article>
+
+      <article class="entry" data-youtube="aRenLtk85Iw" data-titre="petits vfx pour un clip" data-tag="vidéo" data-desc="Ajout d'une cigarette en 3D avec simulation de chute pour err.r. J'ai utilisé After Effects 2020 et Element3d. Réalisé le : 17/11/2025">
+        <div class="asset-wrap" data-num="03">
+          <img src="assets/illustration-03.png" alt="vfx" style="rotate: -1deg;" />
+          <span class="project-num">03</span>
+        </div>
+        <div class="text-wrap">
+          <span class="tag">Projet 03 · vidéo</span>
+          <h2>vfx<br>pour un clip</h2>
+          <p>Ajout d'une cigarette en 3D avec simulation de chute.</p>
+          <button class="btn-projet">Voir le projet</button>
+        </div>
+      </article>
+
+      <article class="entry flip" data-youtube="OfPK_AGkd-Y" data-titre="s'il vous plaît, laissez fermé." data-tag="court-métrage" data-desc="Ouverture pour la projection des films réalisés en spécialité & option Cinéma Audiovisuel projeté à Utopia. Montage, étalonnage et tous éléments post-tournage ont été fait par moi, en 15 jours (en ayant les cours en même temps). J'ai utilisé After Effects 2020 pour la vidéo et Premiere Pro 2020 pour le sound design. Réalisé le : 01/06/2025 (projet daté, améliorations entre temps)">
+        <div class="asset-wrap" data-num="04">
+          <img src="assets/illustration-04.png" alt="svp laissez fermé" style="rotate: 2deg;" />
+          <span class="project-num">04</span>
+        </div>
+        <div class="text-wrap">
+          <span class="tag">Projet 04 · Branding</span>
+          <h2>s'il vous plaît,<br>laissez fermé.</h2>
+          <p>Ouverture pour la projection des films réalisés en spécialité & option Cinéma Audiovisuel projeté à Utopia.</p>
+          <button class="btn-projet">Voir le projet</button>
+        </div>
+      </article>
+
+
+    </section>
+
+    <div class="glow-divider"></div>
+
+    <footer id="contact">
+      <div class="big">On travaille<br>ensemble ?</div>
+      <div class="links">
+        <a href="mailto:julesgerent@outlook.fr?subject=Contact depuis ton site">mail</a>
+        <a href="https://fr.fiverr.com/s/0bwxVaL" target="_blank">Fiverr</a>
+        <a href="https://www.linkedin.com/in/jules-gerent-4210723a8/" target="_blank">LinkedIn</a>
+      </div>
+    </footer>
+    <div class="footer-bottom" style="opacity:0.4">
+        MADE Outer Sans font licensed under CC BY 4.0 <br>
+        <a href="https://fr.vecteezy.com/png-gratuit/torn-paper" target="_blank">
+          Torn Paper PNGs par Vecteezy
+        </a>
+      </div>
+    <div class="footer-bottom">© 2026 — Jules Gerent</div>
+
+  </div>
+
+  <div id="projet-overlay" aria-hidden="true">
+    <div class="projet-inner">
+
+      <button id="btn-retour">Retour</button>
+
+      <div class="projet-content">
+
+        <div class="video-wrap">
+          <iframe
+            id="projet-video"
+            src=""
+            title="Vidéo du projet"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+
+        <div class="projet-info">
+          <span class="p-tag" id="projet-tag"></span>
+          <h2 id="projet-titre"></h2>
+          <p class="p-desc" id="projet-desc"></p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="liquid-scrollbar">
+    <div id="scrollbar-track">
+      <div id="scrollbar-thumb"></div>
+    </div>
+  </div>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    const paperWrap = document.getElementById('paper-wrap');
+    const splash    = document.getElementById('splash');
+    const portfolio = document.getElementById('portfolio');
+    const navGlass  = document.getElementById('nav-glass');
+
+    document.body.style.overflow = 'hidden';
+
+    paperWrap.addEventListener('click', () => {
+      splash.classList.add('leaving');
+      setTimeout(() => {
+        splash.classList.add('gone');
+        portfolio.classList.add('visible');
+        navGlass.classList.add('visible');
+        document.body.style.overflow = '';
+        updateActiveNav();
+      }, 900);
+    });
+
+    const navBtns  = document.querySelectorAll('.nav-btn');
+    const sectionIds = ['accueil', 'projets', 'contact'];
+
+    function updateActiveNav() {
+        const scrollPos = window.scrollY + window.innerHeight / 2;
+
+        sectionIds.forEach(id => {
+            const section = document.getElementById(id);
+            const top = section.offsetTop;
+            const bottom = top + section.offsetHeight;
+
+            const btn = document.querySelector(`.nav-btn[href="#${id}"]`);
+
+            if (scrollPos >= top && scrollPos < bottom) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', updateActiveNav, { passive: true });
+
+    const overlay     = document.getElementById('projet-overlay');
+    const projetVideo = document.getElementById('projet-video');
+    const projetTitre = document.getElementById('projet-titre');
+    const projetTag   = document.getElementById('projet-tag');
+    const projetDesc  = document.getElementById('projet-desc');
+    const btnRetour   = document.getElementById('btn-retour');
+
+    document.querySelectorAll('.btn-projet').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const article = btn.closest('.entry');
+        const ytId    = article.dataset.youtube;
+        const titre   = article.dataset.titre;
+        const tag     = article.dataset.tag;
+        const desc    = article.dataset.desc;
+        projetVideo.src =
+            "https://www.youtube.com/embed/" +
+            ytId +
+            "?autoplay=1&mute=1&rel=0&playsinline=1";
+        projetTitre.textContent = titre;
+        projetTag.textContent   = tag;
+        projetDesc.textContent  = desc;
+
+        overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    btnRetour.addEventListener('click', () => {
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      setTimeout(() => { projetVideo.src = ''; },      300);
+    });
+
+    const lsBar   = document.getElementById('liquid-scrollbar');
+    const lsTrack = document.getElementById('scrollbar-track');
+    const lsThumb = document.getElementById('scrollbar-thumb');
+    let hideTimer;
+    let isDragging = false;
+    let dragStartY = 0;
+    let dragStartScroll = 0;
+
+    function getScrollMetrics() {
+      const docHeight  = document.documentElement.scrollHeight - window.innerHeight;
+      const trackH     = lsTrack.clientHeight;
+      const thumbH     = Math.max(36, trackH * (window.innerHeight / document.documentElement.scrollHeight));
+      const maxThumbTop = trackH - thumbH;
+      const progress   = docHeight > 0 ? window.scrollY / docHeight : 0;
+      return { docHeight, trackH, thumbH, maxThumbTop, progress };
+    }
+
+    function updateScrollbar() {
+      const { thumbH, maxThumbTop, progress } = getScrollMetrics();
+      lsThumb.style.height = thumbH + 'px';
+      lsThumb.style.top    = (progress * maxThumbTop) + 'px';
+
+      lsBar.classList.add('visible');
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => { if (!isDragging) lsBar.classList.remove('visible'); }, 1800);
+    }
+
+    window.addEventListener('scroll', updateScrollbar, { passive: true });
+    window.addEventListener('resize', updateScrollbar, { passive: true });
+
+    lsTrack.addEventListener('click', (e) => {
+      if (e.target === lsThumb) return;
+      const rect = lsTrack.getBoundingClientRect();
+      const { thumbH, maxThumbTop, docHeight } = getScrollMetrics();
+      const clickY = e.clientY - rect.top - thumbH / 2;
+      const clampedY = Math.max(0, Math.min(clickY, maxThumbTop));
+      const targetScroll = (clampedY / maxThumbTop) * docHeight;
+      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    });
+
+    lsThumb.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      dragStartY = e.clientY;
+      dragStartScroll = window.scrollY;
+      lsThumb.classList.add('dragging');
+      lsBar.classList.add('visible');
+      clearTimeout(hideTimer);
+      e.preventDefault();
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const { maxThumbTop, docHeight } = getScrollMetrics();
+      const deltaY = e.clientY - dragStartY;
+      const scrollDelta = (deltaY / maxThumbTop) * docHeight;
+      window.scrollTo({ top: dragStartScroll + scrollDelta });
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      lsThumb.classList.remove('dragging');
+      hideTimer = setTimeout(() => lsBar.classList.remove('visible'), 1800);
+    });
+
+    document.addEventListener("contextmenu", e => e.preventDefault());
+
+    document.addEventListener("keydown", function(e) {
+        if (
+            e.key === "F12" ||
+            (e.ctrlKey && e.shiftKey && e.key === "I") ||
+            (e.ctrlKey && e.key === "u")
+        ) {
+            e.preventDefault();
+        }
+    });
+  </script>
 </body>
 </html>
