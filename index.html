@@ -12,7 +12,7 @@
   <style>
     @font-face {
     font-family: 'MADE Outer Sans';
-    src: url('assets/fonts/MADEOuterSans.woff2D:/Documents/Site WEB/V2/main.html') format('woff2');
+    src: url('assets/fonts/MADEOuterSans.woff2') format('woff2');
     font-weight: 400;
 }
 
@@ -327,10 +327,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: clamp(100px, 14vh, 160px) 0 clamp(32px, 5vh, 64px);
+      padding: clamp(40px, 6vh, 80px) 0 clamp(32px, 5vh, 64px);
     }
-
-    #hero-asset-zone img {
+    
+    #hero-asset-zone video {
       width: clamp(300px, 65vw, 1000px);
       height: auto;
       display: block;
@@ -680,9 +680,20 @@
 
     <section id="accueil">
       <div id="hero-asset-zone">
-        <img src="assets/main.png" alt="portfolio" />
+        <video
+          id="hero-video"
+          autoplay
+          loop
+          muted
+          playsinline
+          style="width: clamp(300px, 65vw, 1000px); height: auto; display: block; filter: drop-shadow(0 16px 48px rgba(0,0,20,0.7));"
+        >
+          <source src="assets/main.webm" type="video/webm" />
+          <source src="assets/main.mov" type="video/quicktime" />
+          <!-- Fallback si aucune vidéo ne charge -->
+          <img src="assets/main.png" alt="portfolio" />
+        </video>
       </div>
-
       <div class="hero-name">
         <p class="eyebrow">Portfolio — 2026</p>
         <h1>Jules<br><em>Gerent</em></h1>
