@@ -690,7 +690,6 @@
         >
           <source src="assets/main.webm" type="video/webm" />
           <source src="assets/main.mov" type="video/quicktime" />
-          <!-- Fallback si aucune vidéo ne charge -->
           <img src="assets/main.png" alt="portfolio" />
         </video>
       </div>
@@ -824,6 +823,15 @@
 
     paperWrap.addEventListener('click', () => {
       splash.classList.add('leaving');
+
+      const heroVideo = document.getElementById('hero-video');
+      
+      heroVideo.play().then(() => {
+        heroVideo.pause();
+        heroVideo.currentTime = 0;
+        setTimeout(() => { heroVideo.play(); }, 1100); 
+      });
+
       setTimeout(() => {
         splash.classList.add('gone');
         portfolio.classList.add('visible');
